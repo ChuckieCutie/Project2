@@ -6,7 +6,9 @@ public class AffinityManager : MonoBehaviour
     public static AffinityManager Instance { get; private set; }
 
     public Dictionary<string, int> npcAffinity;
-    private string[] allNpcNames = { "Bà Hường", "Anh Tuấn", "Cô Hoa", "Bé Nam" }; // Từ GDD [cite: 48, 52, 56, 60]
+    
+    // Tên NPC chuẩn theo GDD
+    private string[] allNpcNames = { "Ông Lâm", "Cô Hoa", "Anh Sơn", "Bé Hà" };
 
     void Awake()
     {
@@ -16,14 +18,13 @@ public class AffinityManager : MonoBehaviour
 
     void Start()
     {
-        // TẢI dữ liệu từ GameDataManager khi bắt đầu vòng lặp mới
         LoadAffinity();
     }
 
     void LoadAffinity()
     {
-        if (GameDataManager.Instance.persistentAffinity != null &&
-            GameDataManager.Instance.persistentAffinity.Count > 0)
+        // Lấy dữ liệu từ GameDataManager (bất tử) đổ vào đây
+        if (GameDataManager.Instance.persistentAffinity != null && GameDataManager.Instance.persistentAffinity.Count > 0)
         {
             npcAffinity = new Dictionary<string, int>(GameDataManager.Instance.persistentAffinity);
             Debug.Log("Affinity đã TẢI từ vòng lặp trước.");
@@ -44,7 +45,24 @@ public class AffinityManager : MonoBehaviour
         if (!npcAffinity.ContainsKey(npcName)) return;
 
         int oldAffinity = npcAffinity[npcName];
-        npcAffinity[npcName] = Mathf.Clamp(oldAffinity + amount, 0, 100); // GDD yêu cầu 0-100 [cite: 26]
+        // Cộng điểm và kẹp trong khoảng 0-100
+        npcAffinity[npcName] = Mathf.Clamp(oldAffinity + amount, 0, 100); 
+        
         Debug.Log($"Affinity của {npcName} đổi từ {oldAffinity} -> {npcAffinity[npcName]}");
+
+        // Kiểm tra xem có lên cấp để mở khóa ký ức không
+        CheckLevelUp(npcName);
+    }
+
+    void CheckLevelUp(string npcName)
+    {
+        int score = npcAffinity[npcName];
+        // Quy đổi level: >60 điểm là Level 2 (Mở khóa Memory Shard)
+        if (score >= 60 && !GameDataManager.Instance.collectedShards.Contains(npcName))
+        {
+            Debug.Log($"MỞ KHÓA KÍ ỨC (Memory Shard) của: {npcName}");
+            GameDataManager.Instance.collectedShards.Add(npcName);
+            // TODO: Thêm code hiển thị thông báo UI tại đây
+        }
     }
 }

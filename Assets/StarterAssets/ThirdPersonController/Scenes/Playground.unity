@@ -129,6 +129,8 @@ GameObject:
   m_Component:
   - component: {fileID: 355237339}
   - component: {fileID: 355237340}
+  - component: {fileID: 355237341}
+  - component: {fileID: 355237342}
   m_Layer: 5
   m_Name: ChoiceContainer
   m_TagString: Untagged
@@ -154,7 +156,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 500, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &355237340
 MonoBehaviour:
@@ -176,12 +178,46 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
+  m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &355237341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355237338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 2
+--- !u!114 &355237342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355237338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: 500
+  m_MinHeight: 100
+  m_PreferredWidth: -1
+  m_PreferredHeight: 300
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!1 &478917681
 GameObject:
   m_ObjectHideFlags: 0
@@ -1524,8 +1560,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c260577a4de3e9545add4fe57553caa3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dayNight: {fileID: 2114283754330233428}
-  clockText: {fileID: 0}
 --- !u!4 &1590071014
 Transform:
   m_ObjectHideFlags: 0
@@ -1559,7 +1593,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1635339484
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1672,6 +1706,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08fdaf9ceb0f3e54fac3c29086e3a640, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  empathyScore: 0
+  reasonScore: 0
+  collectedShards: []
 --- !u!4 &1643932339
 Transform:
   m_ObjectHideFlags: 0
@@ -1803,10 +1840,10 @@ RectTransform:
   - {fileID: 745934981}
   m_Father: {fileID: 355237339}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 80, y: -15}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 300, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &1762682258
 PrefabInstance:
@@ -2159,7 +2196,7 @@ GameObject:
   - component: {fileID: 1986925624}
   - component: {fileID: 1986925623}
   m_Layer: 0
-  m_Name: NPC_BaHuong
+  m_Name: NPC_OngLam
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2192,7 +2229,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1d513c292fcd9b48b505667ce6044e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogueToStart: {fileID: 0}
+  dialogueToStart: {fileID: 11400000, guid: cdb7834c26ad28446b9cfeb6ddb44805, type: 2}
   interactText: "N\xF3i chuy\u1EC7n"
 --- !u!195 &1986925625
 NavMeshAgent:
@@ -2478,77 +2515,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67d7fd60cd402c146af1b3016dc8a4a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeOfDay: 12
-  dayLengthInMinutes: 1
-  timeMultiplier: 0
-  sunLight: {fileID: 2114283754330233425}
-  sunColor:
-    key0:
-      r: 0.8490566
-      g: 0.5506915
-      b: 0.22908504
-      a: 1
-    key1:
-      r: 1
-      g: 1
-      b: 1
-      a: 1
-    key2:
-      r: 0
-      g: 0
-      b: 0
-      a: 0
-    key3:
-      r: 0
-      g: 0
-      b: 0
-      a: 0
-    key4:
-      r: 0
-      g: 0
-      b: 0
-      a: 0
-    key5:
-      r: 0
-      g: 0
-      b: 0
-      a: 0
-    key6:
-      r: 0
-      g: 0
-      b: 0
-      a: 0
-    key7:
-      r: 0
-      g: 0
-      b: 0
-      a: 0
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
-  sunIntensityCurve:
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  maxSunIntensity: 1
 --- !u!1001 &8345070700268369567
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9eb0a51eea387742b62b51eccac33f0, type: 3}
+  m_Name: OngLam_Sang_ChaoHoi
+  m_EditorClassIdentifier: 
+  npcName: "\xD4ng L\xE2m"
+  sentences:
+  - "Ch\xE0o ch\xE1u, l\u1EA1i m\u1ED9t ng\xE0y n\u1EAFng \u0111\u1EB9p nh\u1EC9."
+  - "M\xF9a n\xE0y su\u1ED1i nh\u1ECF h\u01A1n m\u1ECDi n\u0103m, \xF4ng s\u1EE3
+    \u0111\u1EA5t \u0111ang kh\xE1t."
+  choices:
+  - choiceText: "Ch\xE1u c\u0169ng th\u1EA5y v\u1EADy, nh\xECn d\xF2ng su\u1ED1i
+      m\xE0 th\u01B0\u01A1ng b\xE1c nh\u1EC9."
+    effectType: 1
+    effectValue: 1
+    nextDialogue: {fileID: 0}
+  - choiceText: "\u0110\xE2y l\xE0 hi\u1EC7n t\u01B0\u1EE3ng th\u1EE7y v\u0103n b\xECnh
+      th\u01B0\u1EDDng th\xF4i b\xE1c"
+    effectType: 2
+    effectValue: 1
+    nextDialogue: {fileID: 0}
