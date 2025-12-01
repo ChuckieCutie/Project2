@@ -3,32 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-// QUAN TRỌNG: Dòng này để gọi bộ điều khiển nhân vật
-using StarterAssets;
+using StarterAssets; // Gọi bộ điều khiển nhân vật
 
 public class DialogueManager : MonoBehaviour
 {
     public static DialogueManager Instance { get; private set; }
 
     [Header("UI Elements")]
-    public GameObject dialogueCanvas;
-    public TextMeshProUGUI nameText;
-    public TextMeshProUGUI sentenceText;
-    public GameObject choiceContainer;
-    public GameObject choiceButtonTemplate;
+    [SerializeField] private GameObject dialogueCanvas;
+    [SerializeField] private TextMeshProUGUI nameText;
+    [SerializeField] private TextMeshProUGUI sentenceText;
+    [SerializeField] private Transform choiceContainer;
+    [SerializeField] private GameObject choiceButtonTemplate;
 
-    private Queue<string> sentencesQueue;
+    private Queue<string> sentencesQueue = new Queue<string>();
     private DialogueData currentDialogue;
-
-    // Biến để điều khiển chuột của nhân vật
+    
     private StarterAssetsInputs _playerInputs;
 
     void Awake()
     {
         if (Instance != null && Instance != this) Destroy(gameObject);
         else Instance = this;
-
-        sentencesQueue = new Queue<string>();
     }
 
     void Start()
@@ -36,14 +32,14 @@ public class DialogueManager : MonoBehaviour
         dialogueCanvas.SetActive(false);
         choiceButtonTemplate.SetActive(false);
 
-        // Tự động tìm script điều khiển trên người nhân vật
-        _playerInputs = FindObjectOfType<StarterAssetsInputs>();
+        // Tìm script input (Dùng lệnh mới cho Unity bản mới)
+        _playerInputs = FindFirstObjectByType<StarterAssetsInputs>();
     }
 
     void Update()
     {
         // Logic bấm chuột để qua câu thoại
-        if (dialogueCanvas.activeSelf && !choiceContainer.activeSelf)
+        if (dialogueCanvas.activeSelf && !choiceContainer.gameObject.activeSelf)
         {
             if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space))
             {
@@ -56,7 +52,7 @@ public class DialogueManager : MonoBehaviour
     {
         currentDialogue = dialogue;
         dialogueCanvas.SetActive(true);
-        choiceContainer.SetActive(false);
+        choiceContainer.gameObject.SetActive(false);
         sentenceText.gameObject.SetActive(true);
 
         nameText.text = dialogue.npcName;
@@ -68,13 +64,11 @@ public class DialogueManager : MonoBehaviour
         }
 
         // === GIẢI PHÓNG CON CHUỘT ===
-        // 1. Báo cho bộ điều khiển nhân vật dừng xoay camera
         if (_playerInputs != null)
         {
             _playerInputs.cursorLocked = false;
             _playerInputs.cursorInputForLook = false;
         }
-        // 2. Hiện con trỏ chuột của Windows lên
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         // ==============================
@@ -115,52 +109,49 @@ public class DialogueManager : MonoBehaviour
     void DisplayChoices()
     {
         sentenceText.gameObject.SetActive(false);
-        choiceContainer.SetActive(true);
+        choiceContainer.gameObject.SetActive(true);
 
-        // Xóa các nút cũ (trừ cái nút mẫu)
-        foreach (Transform child in choiceContainer.transform)
+        // Xóa nút cũ (trừ template)
+        foreach (Transform child in choiceContainer)
         {
-            if (child.gameObject != choiceButtonTemplate)
-            {
-                Destroy(child.gameObject);
-            }
+            if (child.gameObject != choiceButtonTemplate) Destroy(child.gameObject);
         }
 
         // Tạo nút mới
-        for (int i = 0; i < currentDialogue.choices.Length; i++)
+        foreach (Choice choice in currentDialogue.choices)
         {
-            GameObject choiceButton = Instantiate(choiceButtonTemplate, choiceContainer.transform);
-            choiceButton.SetActive(true); // Bật nút lên (quan trọng!)
+            GameObject btn = Instantiate(choiceButtonTemplate, choiceContainer);
+            btn.SetActive(true);
+            btn.GetComponentInChildren<TextMeshProUGUI>().text = choice.choiceText;
 
-            choiceButton.GetComponentInChildren<TextMeshProUGUI>().text = currentDialogue.choices[i].choiceText;
-
-            int choiceIndex = i;
-            choiceButton.GetComponent<Button>().onClick.AddListener(() => SelectChoice(choiceIndex));
+            // Bắt sự kiện click
+            btn.GetComponent<Button>().onClick.AddListener(() => SelectChoice(choice));
         }
     }
 
-    public void SelectChoice(int index)
+    // ĐÃ SỬA: Dùng trực tiếp 'Choice' thay vì 'DialogueData.Choice'
+    public void SelectChoice(Choice choice)
     {
-        Choice selectedChoice = currentDialogue.choices[index];
-
-        // Xử lý cộng điểm E/X/Affinity
-        switch (selectedChoice.effectType)
+        // ĐÃ SỬA: Dùng trực tiếp 'DialogueEffect' thay vì 'DialogueData.DialogueEffect'
+        switch (choice.effectType)
         {
             case DialogueEffect.AddEmpathy:
-                if (GameDataManager.Instance) GameDataManager.Instance.AddEmpathy(selectedChoice.effectValue);
+                if (GameDataManager.Instance) 
+                    GameDataManager.Instance.ModifyScore(choice.effectValue, 0); 
                 break;
             case DialogueEffect.AddReason:
-                if (GameDataManager.Instance) GameDataManager.Instance.AddReason(selectedChoice.effectValue);
+                if (GameDataManager.Instance) 
+                    GameDataManager.Instance.ModifyScore(0, choice.effectValue); 
                 break;
             case DialogueEffect.AddAffinity:
-                if (AffinityManager.Instance) AffinityManager.Instance.ChangeAffinity(currentDialogue.npcName, selectedChoice.effectValue);
+                if (AffinityManager.Instance) 
+                    AffinityManager.Instance.ChangeAffinity(currentDialogue.npcName, choice.effectValue);
                 break;
         }
 
-        // Chuyển sang hội thoại tiếp theo (nếu có)
-        if (selectedChoice.nextDialogue != null)
+        if (choice.nextDialogue != null)
         {
-            StartDialogue(selectedChoice.nextDialogue);
+            StartDialogue(choice.nextDialogue);
         }
         else
         {
@@ -173,13 +164,11 @@ public class DialogueManager : MonoBehaviour
         dialogueCanvas.SetActive(false);
 
         // === KHÓA LẠI CON CHUỘT ===
-        // 1. Cho phép nhân vật xoay camera trở lại
         if (_playerInputs != null)
         {
             _playerInputs.cursorLocked = true;
             _playerInputs.cursorInputForLook = true;
         }
-        // 2. Ẩn con trỏ chuột đi
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         // ===========================

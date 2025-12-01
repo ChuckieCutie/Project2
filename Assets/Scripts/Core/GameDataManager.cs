@@ -5,39 +5,37 @@ public class GameDataManager : MonoBehaviour
 {
     public static GameDataManager Instance { get; private set; }
 
-    // Dữ liệu Affinity (Lưu điểm số 0-100)
-    public Dictionary<string, int> persistentAffinity = new Dictionary<string, int>();
-
-    // Dữ liệu cốt lõi: Điểm Cảm xúc (E) và Lý trí (X)
-    public int empathyScore = 0; 
-    public int reasonScore = 0;  
+    // Dữ liệu cần lưu qua các vòng lặp (Scene Load)
+    public Dictionary<string, int> PersistentAffinity { get; set; } = new Dictionary<string, int>();
+    public List<string> CollectedShards { get; private set; } = new List<string>();
     
-    // Danh sách Memory Shard đã nhặt
-    public List<string> collectedShards = new List<string>(); 
+    public int EmpathyScore { get; private set; } = 0;
+    public int ReasonScore { get; private set; } = 0;
 
     void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-        }
+        if (Instance != null && Instance != this) Destroy(gameObject);
         else
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // Giữ nguyên qua các Scene
+            DontDestroyOnLoad(gameObject);
         }
     }
 
-    // Hàm tiện ích để cộng điểm (Dùng cho Button trong UI)
-    public void AddEmpathy(int amount) 
-    { 
-        empathyScore += amount; 
-        Debug.Log($"E Score: {empathyScore}"); 
+    public void ModifyScore(int empathyDelta, int reasonDelta)
+    {
+        EmpathyScore += empathyDelta;
+        ReasonScore += reasonDelta;
+        Debug.Log($"Stats Updated -> E: {EmpathyScore} | X: {ReasonScore}");
     }
-    
-    public void AddReason(int amount) 
-    { 
-        reasonScore += amount; 
-        Debug.Log($"X Score: {reasonScore}"); 
+
+    public void UnlockShard(string npcName)
+    {
+        if (!CollectedShards.Contains(npcName))
+        {
+            CollectedShards.Add(npcName);
+            Debug.Log($"ĐÃ MỞ KHÓA KÝ ỨC: {npcName}");
+            // TODO: Bắn Event UI hiển thị popup nhận ký ức
+        }
     }
 }
