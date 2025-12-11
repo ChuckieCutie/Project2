@@ -1,15 +1,19 @@
 using UnityEngine;
-using System; // Để dùng Action
+using System;
 
 public class TimeManager : MonoBehaviour
 {
     public static TimeManager Instance { get; private set; }
 
-    public enum TimeOfDay { Sang, Chieu, Toi }
-    public TimeOfDay CurrentTime { get; private set; } = TimeOfDay.Sang;
+    // Dùng Tiếng Anh chuẩn
+    public enum TimeOfDay { Morning, Afternoon, Evening }
+    public TimeOfDay CurrentTime { get; private set; } = TimeOfDay.Morning;
 
-    // Sự kiện để NPC lắng nghe
     public event Action<TimeOfDay> OnTimeChanged;
+
+    [Header("Settings")]
+    [SerializeField] private float _durationPerPhase = 10f; // 10s đổi buổi 1 lần
+    private float _timer;
 
     void Awake()
     {
@@ -17,9 +21,24 @@ public class TimeManager : MonoBehaviour
         else Instance = this;
     }
 
+    void Start()
+    {
+        _timer = _durationPerPhase;
+        OnTimeChanged?.Invoke(CurrentTime);
+    }
+
     void Update()
     {
-        // Debug: Bấm T để tua nhanh thời gian
+        _timer -= Time.deltaTime;
+        
+        // Tự động chuyển giờ
+        if (_timer <= 0)
+        {
+            AdvanceTime();
+            _timer = _durationPerPhase;
+        }
+
+        // Hoặc bấm T để test
         if (Input.GetKeyDown(KeyCode.T))
         {
             AdvanceTime();
@@ -30,15 +49,14 @@ public class TimeManager : MonoBehaviour
     {
         switch (CurrentTime)
         {
-            case TimeOfDay.Sang:
-                ChangeTime(TimeOfDay.Chieu);
+            case TimeOfDay.Morning:
+                ChangeTime(TimeOfDay.Afternoon);
                 break;
-            case TimeOfDay.Chieu:
-                ChangeTime(TimeOfDay.Toi);
+            case TimeOfDay.Afternoon:
+                ChangeTime(TimeOfDay.Evening);
                 break;
-            case TimeOfDay.Toi:
-                // Hết ngày -> Gọi LoopManager xử lý reset
-                LoopManager.Instance.EndDay();
+            case TimeOfDay.Evening:
+                if (LoopManager.Instance != null) LoopManager.Instance.EndDay();
                 break;
         }
     }
@@ -46,8 +64,15 @@ public class TimeManager : MonoBehaviour
     private void ChangeTime(TimeOfDay newTime)
     {
         CurrentTime = newTime;
-        Debug.Log($"Thời gian chuyển sang: {CurrentTime}");
-        // Bắn pháo hiệu cho tất cả NPC biết
+        Debug.Log($"Time Changed: {CurrentTime}");
         OnTimeChanged?.Invoke(CurrentTime);
     }
+public void StartNextLoop()
+{
+    if (TimeManager.Instance != null)
+    {
+        TimeManager.Instance.CurrentTime = TimeManager.TimeOfDay.Morning;
+        Debug.Log("Đã quay ngược thời gian về Buổi Sáng!");
+    }
+}
 }

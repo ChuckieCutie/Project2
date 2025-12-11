@@ -4,8 +4,6 @@ using UnityEngine;
 public class GameDataManager : MonoBehaviour
 {
     public static GameDataManager Instance { get; private set; }
-
-    // Dữ liệu cần lưu qua các vòng lặp (Scene Load)
     public Dictionary<string, int> PersistentAffinity { get; set; } = new Dictionary<string, int>();
     public List<string> CollectedShards { get; private set; } = new List<string>();
     
@@ -35,7 +33,7 @@ public class GameDataManager : MonoBehaviour
         {
             CollectedShards.Add(npcName);
             Debug.Log($"ĐÃ MỞ KHÓA KÝ ỨC: {npcName}");
-            // TODO: Bắn Event UI hiển thị popup nhận ký ức
         }
     }
+    
 }

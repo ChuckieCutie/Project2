@@ -1,0 +1,113 @@
+{
+  "npc": "BeHa",
+  "nodes": [
+    {
+      "id": "beha_smalltalk_morning",
+      "type": "dialogue",
+      "npc": "BeHa",
+      "tags": ["beha", "smalltalk", "morning"],
+      "priority": 20,
+      "cooldown": 2,
+      "conditions": [
+        { "var": "timeOfDay", "op": "==", "value": "morning" }
+      ],
+      "pc_intro": {
+        "line": "Hà ơi, chị đang ghi lại tiếng nước chảy ở đây. Gần đây em nghe nó khác trước không?",
+        "intent": "MC hỏi hiện tượng tự nhiên, nhẹ nhàng."
+      },
+      "npc_lines": [
+        "Dạo này tiếng nước nhỏ xíu à, có hôm nghe như bị chặn lại.",
+        "Em sợ mai mốt suối im lặng luôn."
+      ],
+      "choices": [
+        {
+          "id": "beha_st_E",
+          "label": "Em để ý giỏi đó, nhờ em chị mới có dữ liệu trước khi họ làm đường.",
+          "effects": [
+            { "op": "inc", "var": "E", "value": 1 },
+            { "op": "inc", "var": "affinity.BeHa", "value": 1 }
+          ],
+          "npc_after": [
+            "Vậy mai em nghe nữa rồi nói chị nha!",
+            "Em sẽ đứng ở tảng đá quen để nghe cho rõ."
+          ],
+          "fallback_response": "Bé cười: \"Mai em nghe nữa rồi nói chị!\""
+        },
+        {
+          "id": "beha_st_X",
+          "label": "Chắc phía trên người ta đắp đất, chị sẽ ghi lại để họ mở dòng chảy cho em.",
+          "effects": [
+            { "op": "inc", "var": "X", "value": 1 },
+            { "op": "inc", "var": "affinity.BeHa", "value": 1 }
+          ],
+          "npc_after": [
+            "Mở lại thì nước có reo to như trước không chị?",
+            "Em nhớ tiếng nước cũ lắm."
+          ],
+          "fallback_response": "Bé nghiêng đầu: \"Mở lại thì nó reo to nữa hông chị?\""
+        }
+      ],
+      "fallback_lines": [
+        "Bé Hà dỏng tai: \"Hôm nay tiếng nước nhỏ xíu à.\""
+      ]
+    },
+
+    {
+      "id": "beha_task_afternoon",
+      "type": "task",
+      "npc": "BeHa",
+      "tags": ["beha", "task", "afternoon"],
+      "priority": 40,
+      "conditions": [
+        { "var": "affinity.BeHa", "op": "==", "value": 1 },
+        { "var": "timeOfDay", "op": "==", "value": "afternoon" }
+      ],
+      "task_lines": [
+        "Chị đem bình nước này cho ông Lâm giúp em nha, em đang coi nước chảy nè!",
+        "Gặp cô Hoa thì nhắn cô đừng quên cho em kẹo nữa nha."
+      ],
+      "effects": [
+        { "op": "inc", "var": "affinity.BeHa", "value": 1 }
+      ]
+    },
+
+    {
+      "id": "beha_memory_evening",
+      "type": "memory_shard",
+      "npc": "BeHa",
+      "tags": ["beha", "memory", "evening"],
+      "priority": 90,
+      "once": true,
+      "conditions": [
+        { "var": "affinity.BeHa", "op": ">=", "value": 2 },
+        { "var": "timeOfDay", "op": "==", "value": "evening" }
+      ],
+      "memory_lines": [
+        "Đêm qua em mơ suối không kêu nữa, người lớn đi qua cũng chẳng ai nghe.",
+        "Em đứng một mình, sợ nếu mai thức dậy thật mà suối im luôn.",
+        "Em chỉ muốn giữ lại cái tiếng róc rách đó thôi."
+      ],
+      "effects": [
+        { "op": "inc", "var": "E", "value": 1 },
+        { "op": "set", "var": "flags.beha_shard", "value": true }
+      ]
+    },
+
+    {
+      "id": "beha_hint_to_lam",
+      "type": "hint",
+      "npc": "BeHa",
+      "tags": ["hint", "to_lam"],
+      "priority": 10,
+      "cooldown": 3,
+      "conditions": [
+        { "var": "flags.lam_shard", "op": "==", "value": false },
+        { "var": "timeOfDay", "op": "==", "value": "afternoon" }
+      ],
+      "hint_lines": [
+        "Chiều chị xuống chỗ ông Lâm đi, ông kể chuyện suối hay lắm!",
+        "Ông biết suối xưa kêu như nào."
+      ]
+    }
+  ]
+}

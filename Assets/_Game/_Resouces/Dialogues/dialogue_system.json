@@ -1,0 +1,68 @@
+{
+  "npc": "System",
+  "nodes": [
+    {
+      "id": "gate_true_ending",
+      "type": "gate",
+      "npc": "System",
+      "tags": ["gate", "ending"],
+      "priority": 100,
+      "conditions": [
+        { "var": "flags.lam_shard", "op": "==", "value": true },
+        { "var": "flags.hoa_shard", "op": "==", "value": true },
+        { "var": "flags.son_shard", "op": "==", "value": true },
+        { "var": "flags.beha_shard", "op": "==", "value": true }
+      ],
+      "system_lines": [
+        "Những mảnh chuyện về suối, về nền chợ và ánh sáng trên đá dần ghép lại trong đầu bạn.",
+        "Những thay đổi lớn nhỏ mà mỗi người dân kể đều đang dẫn bạn về cùng một điểm.",
+        "Hãy đến đài phun nước ở trung tâm thị trấn để hoàn tất báo cáo cuối cùng."
+      ],
+      "effects": [
+        { "op": "set", "var": "flags.true_ending_unlocked", "value": true }
+      ]
+    },
+
+    {
+      "id": "ending_bao_ton",
+      "type": "ending",
+      "npc": "System",
+      "tags": ["ending", "bao_ton"],
+      "priority": 50,
+      "conditions": [
+        { "var": "flags.true_ending_unlocked", "op": "==", "value": true },
+        { "var": "E", "op": ">", "value": "X" }
+      ],
+      "system_lines": [
+        "Bạn đứng trước đài phun nước. Gió thổi mang theo tiếng suối quen thuộc.",
+        "Những ký ức mà người dân chia sẻ khiến bạn tin rằng thị trấn này cần giữ lại điều đang dần mất.",
+        "Trong báo cáo cuối cùng, bạn đề xuất phương án bảo tồn dòng suối, những lối đi cũ và nếp sinh hoạt quen thuộc.",
+        "Câu chuyện của thị trấn này đáng được chậm lại, để hơi ấm còn lại không bị cuốn trôi."
+      ],
+      "effects": [
+        { "op": "set", "var": "flags.ending_bao_ton", "value": true }
+      ]
+    },
+
+    {
+      "id": "ending_phat_trien",
+      "type": "ending",
+      "npc": "System",
+      "tags": ["ending", "phat_trien"],
+      "priority": 50,
+      "conditions": [
+        { "var": "flags.true_ending_unlocked", "op": "==", "value": true },
+        { "var": "X", "op": ">", "value": "E" }
+      ],
+      "system_lines": [
+        "Bạn đứng ở trung tâm thị trấn khi mặt trời đã nghiêng bóng.",
+        "Những thông tin thu thập được cho thấy thị trấn đã đến lúc thay đổi để không bị bỏ lại phía sau.",
+        "Trong báo cáo cuối cùng, bạn đề xuất mở lối thoát nước mới, cải tạo mặt bằng và chỉnh trang khu dân cư.",
+        "Dòng suối sẽ đổi hướng, và cuộc sống nơi đây cũng vậy — hy vọng theo hướng tốt đẹp hơn."
+      ],
+      "effects": [
+        { "op": "set", "var": "flags.ending_phat_trien", "value": true }
+      ]
+    }
+  ]
+}

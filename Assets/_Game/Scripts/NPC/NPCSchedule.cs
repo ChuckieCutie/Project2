@@ -6,10 +6,10 @@ public class NPCSchedule : MonoBehaviour
 {
     private NavMeshAgent agent;
 
-    [Header("Lịch trình di chuyển")]
-    [SerializeField] private Transform viTriSang;
-    [SerializeField] private Transform viTriChieu;
-    [SerializeField] private Transform viTriToi;
+    [Header("Schedule Locations")]
+    [SerializeField] private Transform locationMorning;
+    [SerializeField] private Transform locationAfternoon;
+    [SerializeField] private Transform locationEvening;
 
     void Awake()
     {
@@ -18,7 +18,6 @@ public class NPCSchedule : MonoBehaviour
 
     void Start()
     {
-        // Khi game bắt đầu, di chuyển ngay tới vị trí theo giờ hiện tại
         if (TimeManager.Instance != null)
         {
             MoveToLocation(TimeManager.Instance.CurrentTime);
@@ -27,40 +26,36 @@ public class NPCSchedule : MonoBehaviour
 
     void OnEnable()
     {
-        // Đăng ký nhận thông báo thay đổi giờ
         if (TimeManager.Instance != null)
             TimeManager.Instance.OnTimeChanged += MoveToLocation;
     }
 
     void OnDisable()
     {
-        // Hủy đăng ký để tránh lỗi
         if (TimeManager.Instance != null)
             TimeManager.Instance.OnTimeChanged -= MoveToLocation;
     }
 
-    // Hàm này tự động chạy khi giờ thay đổi
     private void MoveToLocation(TimeManager.TimeOfDay time)
     {
         Transform destination = null;
 
         switch (time)
         {
-            case TimeManager.TimeOfDay.Sang:
-                destination = viTriSang;
+            case TimeManager.TimeOfDay.Morning:
+                destination = locationMorning;
                 break;
-            case TimeManager.TimeOfDay.Chieu:
-                destination = viTriChieu;
+            case TimeManager.TimeOfDay.Afternoon:
+                destination = locationAfternoon;
                 break;
-            case TimeManager.TimeOfDay.Toi:
-                destination = viTriToi;
+            case TimeManager.TimeOfDay.Evening:
+                destination = locationEvening;
                 break;
         }
 
         if (destination != null)
         {
             agent.SetDestination(destination.position);
-            Debug.Log($"{gameObject.name} đang đi tới {destination.name}");
         }
     }
 }
