@@ -67,12 +67,12 @@ public class TimeManager : MonoBehaviour
         Debug.Log($"Time Changed: {CurrentTime}");
         OnTimeChanged?.Invoke(CurrentTime);
     }
-public void StartNextLoop()
-{
-    if (TimeManager.Instance != null)
+    public void StartNextLoop()
     {
-        TimeManager.Instance.CurrentTime = TimeManager.TimeOfDay.Morning;
-        Debug.Log("Đã quay ngược thời gian về Buổi Sáng!");
+        if (TimeManager.Instance != null)
+        {
+            TimeManager.Instance.CurrentTime = TimeManager.TimeOfDay.Morning;
+            Debug.Log("Đã quay ngược thời gian về Buổi Sáng!");
+        }
     }
-}
 }
