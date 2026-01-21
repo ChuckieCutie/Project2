@@ -1,0 +1,113 @@
+{
+  "npc": "Hoa",
+  "nodes": [
+    {
+      "id": "hoa_smalltalk_morning",
+      "type": "dialogue",
+      "npc": "Hoa",
+      "tags": ["hoa", "smalltalk", "morning"],
+      "priority": 20,
+      "cooldown": 2,
+      "conditions": [
+        { "var": "timeOfDay", "op": "==", "value": "morning" }
+      ],
+      "pc_intro": {
+        "line": "Cô Hoa ơi, em đang ghi hiện trạng mặt bằng khu chợ cũ. Mấy hôm nay mưa xuống chỗ này thoát nước ổn không cô?",
+        "intent": "MC hỏi kỹ thuật nhẹ để hợp lý nghề."
+      },
+      "npc_lines": [
+        "Mưa to là nước dồn ngay trước cửa, phải lấy chổi đẩy ra suốt.",
+        "Nghe nói sau này mở khu mới, cô sợ mặt tiền bị che, khách quen không thấy mà ghé."
+      ],
+      "choices": [
+        {
+          "id": "hoa_st_E",
+          "label": "Những chỗ nhỏ như tiệm của cô mới giữ được ký ức khu chợ, em sẽ ghi rõ vào báo cáo.",
+          "effects": [
+            { "op": "inc", "var": "E", "value": 1 },
+            { "op": "inc", "var": "affinity.Hoa", "value": 1 }
+          ],
+          "npc_after": [
+            "Cảm ơn em, người cũ vẫn thích ghé chỗ quen.",
+            "Chỉ mong cái nếp xưa đừng biến mất."
+          ],
+          "fallback_response": "Cô cười: \"Nghe em nói cô cũng đỡ lo, chỗ nhỏ này gắn với nhiều người lắm.\""
+        },
+        {
+          "id": "hoa_st_X",
+          "label": "Nếu khu mới mở thì chỉ cần điều chỉnh lối vào, tiệm vẫn hoạt động tốt.",
+          "effects": [
+            { "op": "inc", "var": "X", "value": 1 },
+            { "op": "inc", "var": "affinity.Hoa", "value": 1 }
+          ],
+          "npc_after": [
+            "Ừ thì cũng phải chạy theo thôi, miễn giữ cho sạch và dễ nhìn.",
+            "Khách có đường vào là được."
+          ],
+          "fallback_response": "Cô gật: \"Ừ thì cũng phải chạy theo chớ, chỉ mong người ta giữ cho sạch.\""
+        }
+      ],
+      "fallback_lines": [
+        "Cô Hoa nhìn ra ngoài: \"Mưa cái là nước chụm ngay đây, mà nghe nói mai mốt họ làm khu mới nữa.\""
+      ]
+    },
+
+    {
+      "id": "hoa_task_noon",
+      "type": "task",
+      "npc": "Hoa",
+      "tags": ["hoa", "task", "noon"],
+      "priority": 40,
+      "conditions": [
+        { "var": "affinity.Hoa", "op": "==", "value": 1 },
+        { "var": "timeOfDay", "op": "==", "value": "noon" }
+      ],
+      "task_lines": [
+        "Em tiện tay chụp giúp cô cái nền với, lỡ mai mốt họ hỏi thì cô còn có hình.",
+        "Nhờ em ghi giùm chỗ nước hay đọng nữa nha."
+      ],
+      "effects": [
+        { "op": "inc", "var": "affinity.Hoa", "value": 1 }
+      ]
+    },
+
+    {
+      "id": "hoa_memory_evening",
+      "type": "memory_shard",
+      "npc": "Hoa",
+      "tags": ["hoa", "memory", "evening"],
+      "priority": 90,
+      "once": true,
+      "conditions": [
+        { "var": "affinity.Hoa", "op": ">=", "value": 2 },
+        { "var": "timeOfDay", "op": "==", "value": "evening" }
+      ],
+      "memory_lines": [
+        "Ngày xưa mẹ cô bưng rổ bánh ra chợ là ai cũng chào.",
+        "Cô chỉ sợ mai sau làm mới hết thì chẳng ai nhớ ai.",
+        "Tiệm nhỏ này là chỗ hẹn của nhiều người mà."
+      ],
+      "effects": [
+        { "op": "inc", "var": "E", "value": 1 },
+        { "op": "set", "var": "flags.hoa_shard", "value": true }
+      ]
+    },
+
+    {
+      "id": "hoa_hint_to_son",
+      "type": "hint",
+      "npc": "Hoa",
+      "tags": ["hint", "to_son"],
+      "priority": 10,
+      "cooldown": 3,
+      "conditions": [
+        { "var": "flags.son_shard", "op": "==", "value": false },
+        { "var": "timeOfDay", "op": "==", "value": "afternoon" }
+      ],
+      "hint_lines": [
+        "Chiều em lên khúc suối gặp cậu họa sĩ đi, cậu đó nhìn gì cũng thấy khác.",
+        "Cảnh trên đó đổi nhiều lắm."
+      ]
+    }
+  ]
+}

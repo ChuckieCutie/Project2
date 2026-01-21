@@ -1,0 +1,114 @@
+{
+  "npc": "Son",
+  "nodes": [
+    {
+      "id": "son_smalltalk_afternoon",
+      "type": "dialogue",
+      "npc": "Son",
+      "tags": ["son", "smalltalk", "afternoon"],
+      "priority": 20,
+      "cooldown": 2,
+      "conditions": [
+        { "var": "timeOfDay", "op": "==", "value": "afternoon" }
+      ],
+      "pc_intro": {
+        "line": "Anh Sơn, tôi đi kiểm tra dải ven suối. Anh ngồi vẽ đây hoài chắc để ý rõ chỗ này đổi màu nước hay bóng cây chứ?",
+        "intent": "MC hỏi theo hướng quan sát cảnh quan."
+      },
+      "npc_lines": [
+        "Có ngày nước xanh như kính, có ngày đục một cách lạ.",
+        "Bóng cây đổi vì người ta đã chặt bớt phía trên.",
+        "Cảnh vật ở đây đang bị bào mòn từ từ."
+      ],
+      "choices": [
+        {
+          "id": "son_st_E",
+          "label": "Những thay đổi nhỏ vậy lại dễ khiến người ở đây nhớ lâu.",
+          "effects": [
+            { "op": "inc", "var": "E", "value": 1 },
+            { "op": "inc", "var": "affinity.Son", "value": 1 }
+          ],
+          "npc_after": [
+            "Cậu hiểu rồi đó, tôi vẽ để giữ lại cảm giác trước khi nó trôi đi.",
+            "Có những thứ mất rồi thì khó gọi về."
+          ],
+          "fallback_response": "Anh mỉm cười: \"Ừ, đẹp nhất là lúc nó còn chưa bị đổi.\""
+        },
+        {
+          "id": "son_st_X",
+          "label": "Tôi sẽ đánh dấu điểm này để khi làm đường ven suối không chặn mất tầm nhìn.",
+          "effects": [
+            { "op": "inc", "var": "X", "value": 1 },
+            { "op": "inc", "var": "affinity.Son", "value": 1 }
+          ],
+          "npc_after": [
+            "Miễn là họ cũng chịu nhìn thử một lần trước khi xây.",
+            "Cảnh này đáng để dành một khoảng thở."
+          ],
+          "fallback_response": "Anh gật: \"Miễn là họ cũng chịu nhìn thử một lần trước khi xây.\""
+        }
+      ],
+      "fallback_lines": [
+        "Anh Sơn che mắt nhìn mặt nước: \"Ánh sáng đập lên đá không còn như mấy tháng trước nữa.\""
+      ]
+    },
+
+    {
+      "id": "son_task_lateafternoon",
+      "type": "task",
+      "npc": "Son",
+      "tags": ["son", "task", "afternoon"],
+      "priority": 40,
+      "conditions": [
+        { "var": "affinity.Son", "op": "==", "value": 1 },
+        { "var": "timeOfDay", "op": "==", "value": "afternoon" }
+      ],
+      "task_lines": [
+        "Nếu đi bên kia bờ thấy tảng đá nào mới lộ ra thì chụp cho tôi với nhé.",
+        "Tôi cần tham chiếu màu, cậu cũng có dữ liệu cho báo cáo."
+      ],
+      "effects": [
+        { "op": "inc", "var": "affinity.Son", "value": 1 }
+      ]
+    },
+
+    {
+      "id": "son_memory_evening",
+      "type": "memory_shard",
+      "npc": "Son",
+      "tags": ["son", "memory", "evening"],
+      "priority": 90,
+      "once": true,
+      "conditions": [
+        { "var": "affinity.Son", "op": ">=", "value": 2 },
+        { "var": "timeOfDay", "op": "==", "value": "evening" }
+      ],
+      "memory_lines": [
+        "Lần đầu tới đây, tôi thấy ánh sáng ôm lấy gốc cây như có ký ức riêng.",
+        "Tôi sợ một ngày quy hoạch xong, ánh sáng ấy không còn chỗ đặt chân.",
+        "Thế là tôi ngồi lại, vẽ từng chút một."
+      ],
+      "effects": [
+        { "op": "inc", "var": "E", "value": 1 },
+        { "op": "set", "var": "flags.son_shard", "value": true }
+      ]
+    },
+
+    {
+      "id": "son_hint_to_beha",
+      "type": "hint",
+      "npc": "Son",
+      "tags": ["hint", "to_beha"],
+      "priority": 10,
+      "cooldown": 3,
+      "conditions": [
+        { "var": "flags.beha_shard", "op": "==", "value": false },
+        { "var": "timeOfDay", "op": "==", "value": "afternoon" }
+      ],
+      "hint_lines": [
+        "Chiều xuống chỗ con bé Hà đi, nó nghe tiếng nước còn giỏi hơn tụi mình.",
+        "Trẻ con thấy những đổi thay rất nhanh."
+      ]
+    }
+  ]
+}

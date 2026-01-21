@@ -1,0 +1,114 @@
+{
+  "npc": "Lam",
+  "nodes": [
+    {
+      "id": "lam_smalltalk_morning",
+      "type": "dialogue",
+      "npc": "Lam",
+      "tags": ["lam", "smalltalk", "morning"],
+      "priority": 20,
+      "cooldown": 2,
+      "conditions": [
+        { "var": "timeOfDay", "op": "==", "value": "morning" }
+      ],
+      "pc_intro": {
+        "line": "Cháu chào bác, cháu đến từ đội khảo sát công ty A. Mấy hôm nay bờ suối bên này có biến đổi gì không ạ?",
+        "intent": "MC mở lời bằng nghiệp vụ nhưng trung tính."
+      },
+      "npc_lines": [
+        "Ờ… mấy bữa nay nước rút chậm lắm, đất sát mép kia mềm hết rồi.",
+        "Con suối này hồi trước hiền hơn, giờ người ta đụng vào nhiều nên nó đổi tính.",
+        "Nhìn vậy chứ đất với nước cũng biết buồn đó cháu."
+      ],
+      "choices": [
+        {
+          "id": "lam_st_E",
+          "label": "Đất mà đổi nhanh quá thì người sống ở đây cũng khó yên.",
+          "effects": [
+            { "op": "inc", "var": "E", "value": 1 },
+            { "op": "inc", "var": "affinity.Lam", "value": 1 }
+          ],
+          "npc_after": [
+            "Ừ, người vội quá nên ít ai nghe đất than.",
+            "Biết để ý vậy là tốt rồi."
+          ],
+          "fallback_response": "Ông gật: \"Đất nhớ chứ, chỉ là người vội quá nên không nghe thôi.\""
+        },
+        {
+          "id": "lam_st_X",
+          "label": "Cháu sẽ ghi rõ để khi làm kè người ta giữ được dòng chảy cũ.",
+          "effects": [
+            { "op": "inc", "var": "X", "value": 1 },
+            { "op": "inc", "var": "affinity.Lam", "value": 1 }
+          ],
+          "npc_after": [
+            "Sửa thì sửa, đừng phá hết.",
+            "Còn tiếng nước, còn ký ức."
+          ],
+          "fallback_response": "Ông khà: \"Sửa thì sửa, đừng bọc bê tông trắng xoá là được.\""
+        }
+      ],
+      "fallback_lines": [
+        "Ông Lâm nhìn mặt nước: \"Mấy năm nay nước lên xuống thất thường lắm.\""
+      ]
+    },
+
+    {
+      "id": "lam_task_noon",
+      "type": "task",
+      "npc": "Lam",
+      "tags": ["lam", "task", "noon"],
+      "priority": 40,
+      "conditions": [
+        { "var": "affinity.Lam", "op": "==", "value": 1 },
+        { "var": "timeOfDay", "op": "==", "value": "noon" }
+      ],
+      "task_lines": [
+        "Nếu cháu có đi lên đầu nguồn thì nhìn giùm ông xem nước còn trong không nhé.",
+        "Thấy đục hay ít đi thì nói ông hay, để bảo bà con cẩn thận."
+      ],
+      "effects": [
+        { "op": "inc", "var": "affinity.Lam", "value": 1 }
+      ]
+    },
+
+    {
+      "id": "lam_memory_evening",
+      "type": "memory_shard",
+      "npc": "Lam",
+      "tags": ["lam", "memory", "evening"],
+      "priority": 90,
+      "once": true,
+      "conditions": [
+        { "var": "affinity.Lam", "op": ">=", "value": 2 },
+        { "var": "timeOfDay", "op": "==", "value": "evening" }
+      ],
+      "memory_lines": [
+        "Có năm nước lên tới tận bậc gỗ này mà yên lặng lắm.",
+        "Hồi đó bờ chưa bị xẻ, nước trôi vòng mà không giận ai.",
+        "Giờ người ta chỉnh dòng, ông sợ cái yên đó chẳng về nữa."
+      ],
+      "effects": [
+        { "op": "inc", "var": "E", "value": 1 },
+        { "op": "set", "var": "flags.lam_shard", "value": true }
+      ]
+    },
+
+    {
+      "id": "lam_hint_to_hoa",
+      "type": "hint",
+      "npc": "Lam",
+      "tags": ["hint", "to_hoa"],
+      "priority": 10,
+      "cooldown": 3,
+      "conditions": [
+        { "var": "flags.hoa_shard", "op": "==", "value": false },
+        { "var": "timeOfDay", "op": "==", "value": "morning" }
+      ],
+      "hint_lines": [
+        "Dưới tiệm cô Hoa cũng có chuyện đất đai đó, xuống hỏi thử đi.",
+        "Chỗ đó mưa là nước chụm lại hoài."
+      ]
+    }
+  ]
+}
